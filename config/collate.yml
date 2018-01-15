@@ -1,0 +1,2 @@
+sources:
+  \App\Services\Sources\Repositories\SuperCarrosSource: true
