@@ -7,5 +7,10 @@
     interface SourcesCarsInterface
     {
 
-        function getPrices($brand, $model, $type);
+        function getName();
+        function newItem(SourceItemsData $sourceItemsData);
+        /**
+         * @return SourceItemsData
+         */
+        function startScratching();
     }

@@ -16,27 +16,37 @@
             $this->source = new SourceBase();
         }
 
+
         /** @test */
-        function searchTest()
+        function verifyingRegisteredSourcesDataItemsTest()
         {
-           $results = $this->source->search();
-
-           $this->assertArrayHasKey('cod', $results);
-        }
-
-        /** @test */
-        function verifyingRegisteredSourcesTest(){
-
-            //var_dump($this->source->getSources());
 
             foreach ($this->source->getSources() as $source =>$config) {
 
                 /** @var SourcesCarsInterface $repositoryMock */
-                $repositoryMock = $this->getMockBuilder($source)->getMock();
-                $prices         = $repositoryMock->getPrices('','','');
+                $repositoryMock = new $source();
 
-                $this->assertTrue(is_float($prices));
+                $this->assertInstanceOf(\App\Services\Sources\SourcesCarsInterface::class, $repositoryMock);
+
+                $source_scratch = $repositoryMock->startScratching();
+
+                foreach ($source_scratch as $scratch)
+                {
+                    $this->assertNotEmpty($scratch->branch,"branch:".$source);
+                    $this->assertNotEmpty($scratch->model);
+                    //$this->assertTrue($this->isCurrency($scratch->price),'price: '.$scratch->price);
+                }
             }
+        }
+
+
+        /**
+         * @param $number
+         * @return int
+         */
+        function isCurrency($number)
+        {
+            return preg_match("/^\d*(\.\d{2})?$/", $number);
         }
 
     }
